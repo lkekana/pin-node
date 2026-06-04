@@ -1,4 +1,4 @@
-module pin-node
+module github.com/lkekana/pin-node
 
 go 1.21
 
