@@ -39,7 +39,7 @@ func getOverwriteConfirmation() bool {
 	return len(response) > 0 && response[0] == 'y'
 }
 
-func getConfirmationIfFileExists(filePath string, parsedExecVersion *semver.Version) bool {
+func getConfirmationIfFileExists(filePath string, parsedExecVersion *semver.Version, parsedVersionStr string) bool {
 	fileVersion, err := os.ReadFile(filePath)
 	if err != nil {
 		if !os.IsNotExist(err) {
@@ -50,10 +50,9 @@ func getConfirmationIfFileExists(filePath string, parsedExecVersion *semver.Vers
 	}
 
 	existingVersion := strings.TrimSpace(string(fileVersion))
-	execVersionStr := parsedExecVersion.String()
 
 	// skip parsing if existing version is exactly the same as the current version (with or without "v" prefix)
-	if existingVersion == execVersionStr || existingVersion == "v"+execVersionStr {
+	if existingVersion == parsedVersionStr || existingVersion == "v"+parsedVersionStr {
 		return false
 	}
 
@@ -93,13 +92,13 @@ func getConfirmationIfFileExists(filePath string, parsedExecVersion *semver.Vers
 	return true
 }
 
-func processVersionFile(filePath string, parsedVersion *semver.Version, forceOverwrite bool) bool {
+func processVersionFile(filePath string, parsedVersion *semver.Version, parsedVersionStr string, forceOverwrite bool) bool {
 	overwrite := forceOverwrite
 	if !forceOverwrite {
-		overwrite = getConfirmationIfFileExists(filePath, parsedVersion)
+		overwrite = getConfirmationIfFileExists(filePath, parsedVersion, parsedVersionStr)
 	}
 	if overwrite {
-		err := os.WriteFile(filePath, []byte(parsedVersion.String()+"\n"), 0644)
+		err := os.WriteFile(filePath, []byte(parsedVersionStr+"\n"), 0644)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error writing to %s: %v\n", filePath, err)
 			os.Exit(1)
@@ -141,10 +140,10 @@ func main() {
 	nodeversionSet := false
 	packageJsonSet := false
 
-	nodeversionSet = processVersionFile(".node-version", parsedVersion, forceOverwrite)
+	nodeversionSet = processVersionFile(".node-version", parsedVersion, version, forceOverwrite)
 
 	if createNvmrc {
-		nvmrcSet = processVersionFile(".nvmrc", parsedVersion, forceOverwrite)
+		nvmrcSet = processVersionFile(".nvmrc", parsedVersion, version, forceOverwrite)
 	}
 
 	if modifyPackageJson {
