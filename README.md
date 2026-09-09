@@ -125,7 +125,7 @@ An hours' worth of work to save minutes of frustration in the future :)
 
 ## Roadmap
 
-- [ ] **Automated Releases:** Set up GitHub Actions to automatically build and publish cross-platform binaries to GitHub Releases.
+- [x] **Automated Releases:** Set up GitHub Actions to automatically build and publish cross-platform binaries to GitHub Releases.
 - [ ] **Upstream Contribution:** I'm planning on contributing this logic natively to `fnm` so that `fnm use` can optionally write to version files out-of-the-box, eventually making this standalone tool obsolete!
 
 ## License
