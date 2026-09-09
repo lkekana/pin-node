@@ -1,11 +1,11 @@
 module github.com/lkekana/pin-node
 
-go 1.21
+go 1.19
 
 require (
-	github.com/Masterminds/semver/v3 v3.5.0
-	github.com/fatih/color v1.18.0
-	github.com/spf13/cobra v1.10.2
+	github.com/Masterminds/semver/v3 v3.2.1 // requires Go 1.18
+	github.com/fatih/color v1.18.0 // requires Go 1.17
+	github.com/spf13/cobra v1.10.2 // requires Go 1.15
 )
 
 require (
