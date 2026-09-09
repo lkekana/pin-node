@@ -10,7 +10,54 @@ With an average runtime of **24-50ms**, it seamlessly integrates into your workf
 
 ## Installation
 
-### Via Go Install (Recommended)
+### Via Releases (Recommended)
+
+You can download pre-built binaries for macOS and Windows from the [latest release](https://github.com/lkekana/pin-node/releases/latest).
+
+#### macOS
+
+1. Download the appropriate archive for your Mac:
+   - **Apple Silicon (M1/M2/M3):** `pin-node_Darwin_arm64.tar.gz`
+   - **Intel:** `pin-node_Darwin_x86_64.tar.gz`
+   
+   *You can do this via your browser or directly in the terminal (Apple Silicon example):*
+   ```bash
+   curl -L -O https://github.com/lkekana/pin-node/releases/latest/download/pin-node_Darwin_arm64.tar.gz
+   ```
+
+2. Extract the archive:
+   ```bash
+   tar -xzf pin-node_Darwin_arm64.tar.gz
+   ```
+
+3. Move the binary to your PATH:
+   ```bash
+   sudo mv pin /usr/local/bin/
+   ```
+
+#### Windows
+
+1. Download the appropriate archive for your system (most likely `pin-node_Windows_x86_64.zip`) from the [latest release](https://github.com/lkekana/pin-node/releases/latest).
+2. Extract the `.zip` file.
+3. Move `pin.exe` to a directory that is included in your system's `PATH` environment variable. 
+
+*Here is a quick way to do this using PowerShell:*
+```powershell
+# 1. Create a local bin directory in your user profile
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\bin"
+
+# 2. Move the executable (assuming you are in the extracted folder)
+Move-Item .\pin.exe "$env:USERPROFILE\bin\pin.exe"
+
+# 3. Add the directory to your User PATH (if it's not already there)
+$currentPath = [Environment]::GetEnvironmentVariable("Path", "User")
+if ($currentPath -notlike "*$env:USERPROFILE\bin*") {
+    [Environment]::SetEnvironmentVariable("Path", "$currentPath;$env:USERPROFILE\bin", "User")
+    Write-Host "Added to PATH. Please restart your terminal to use 'pin-node'."
+}
+```
+
+### Via Go Install
 If you have Go installed, you can easily install the CLI globally using:
 ```bash
 go install github.com/lkekana/pin-node@latest
@@ -39,7 +86,7 @@ go run .
 ## Usage
 
 ```bash
-pin-node [flags]
+pin [flags]
 ```
 
 ### Flags
@@ -51,16 +98,16 @@ pin-node [flags]
 ### Examples
 ```bash
 # Pin to the currently installed Node.js version (creates .node-version)
-pin-node
+pin
 
 # Pin a specific Node.js version
-pin-node -v 18.16.0
+pin -v 18.16.0
 
 # Pin and also update .nvmrc and package.json
-pin-node -v 18.16.0 --nvmrc --engines
+pin -v 18.16.0 --nvmrc --engines
 
 # Force overwrite without interactive prompts
-pin-node -v 20.0.0 --force --nvmrc --engines
+pin -v 20.0.0 --force --nvmrc --engines
 ```
 
 ## Design Choices & Limitations
